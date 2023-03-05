@@ -18,9 +18,8 @@ export default {
   methods: {
     addTodoList: function() {
       if (this.newTodoItem !== '') {
-        let obj = {completed: false, item: this.newTodoItem};
         // text/text가 아닌 text/boolean 값을 저장, 텍스트/완료여부
-        localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+        this.$emit('addTodoItem', this.newTodoItem)
         this.clearInput();
       }
     },

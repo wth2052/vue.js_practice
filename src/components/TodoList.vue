@@ -2,9 +2,9 @@
   <div>
     <ul>
       <li v-for="(todoItem, index) in propsdata" class="shadow" v-bind:key="todoItem.item">
-        <span class="checkBtn" v-on:click="checkTodoList(todoItem)">
-          <i class="fas fa-check"></i>
-        {{ todoItem }}
+      <span class="checkBtn" v-on:click="toggleComplete(todoItem, index)">
+        <i class="fas fa-check"></i>
+        {{ todoItem.item }}
         <span class="removeBtn" v-on:click="removeTodoList(todoItem, index)">
           <i class="fas fa-trash-alt"></i>
         </span>
@@ -13,36 +13,21 @@
     </ul>
   </div>
 </template>
-
 <script>
 export default {
-  data: function() {
-    return {
-      todoItems: []
-    }
-  },
+
   props: ['propsdata'],
-methods: {
+  methods: {
     removeTodoList: function(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1); //특정 index에서 하나를 지운다.
+      this.$emit('removeItem', todoItem, index);
     },
-  checkTodoList: function (todoItem) {
-    todoItem.completed = !todoItem.completed;
-    localStorage.removeItem(todoItem.item);
-    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-  }
-  },
-created: function() {
-  if (localStorage.length > 0) {
-    for (let i = 0; i < localStorage.length; i++) {
-      //찍먹이 첨이라 저 loglevel:webpack-dev-server가 뭔지 모르겠다. 찾아보니 로컬에서 개발 서버를 실행하기 위해 사용하는 도구란다
-      if (localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-        this.todoItems.push(localStorage.key(i));
-      }
+    toggleComplete: function(todoItem) {
+      todoItem.completed = !todoItem.completed;
+
+      localStorage.removeItem(todoItem.item);
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
     }
   }
-}
 }
 </script>
 
