@@ -1,12 +1,14 @@
 <template>
   <div>
     <ul>
-      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem" class="shadow">
+      <li v-for="(todoItem, index) in propsdata" class="shadow" v-bind:key="todoItem.item">
+        <span class="checkBtn" v-on:click="checkTodoList(todoItem)">
+          <i class="fas fa-check"></i>
         {{ todoItem }}
         <span class="removeBtn" v-on:click="removeTodoList(todoItem, index)">
-<!--          아직 이 far, fas 차이가 뭔지 잘 모르겠다.-->
           <i class="fas fa-trash-alt"></i>
         </span>
+      </span>
       </li>
     </ul>
   </div>
@@ -19,11 +21,17 @@ export default {
       todoItems: []
     }
   },
+  props: ['propsdata'],
 methods: {
     removeTodoList: function(todoItem, index) {
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1); //특정 index에서 하나를 지운다.
-    }
+    },
+  checkTodoList: function (todoItem) {
+    todoItem.completed = !todoItem.completed;
+    localStorage.removeItem(todoItem.item);
+    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+  }
   },
 created: function() {
   if (localStorage.length > 0) {

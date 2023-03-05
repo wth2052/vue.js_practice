@@ -1,9 +1,10 @@
 <template>
   <div class="inputBox shadow">
     <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodoList">
+    <!-- <button v-on:click="addTodo">add</button> -->
     <span class="addContainer" v-on:click="addTodoList">
-        <i class="far fa-plus-square addBtn">입력</i>
-    </span>
+        <i class="fas fa-plus addBtn" aria-hidden="true"></i>
+      </span>
   </div>
 </template>
 
@@ -16,13 +17,15 @@ export default {
   },
   methods: {
     addTodoList: function() {
-      console.log(this.newTodoItem);
-      //저장
-      localStorage.setItem(this.newTodoItem, this.newTodoItem);
-      this.clearInput();
+      if (this.newTodoItem !== '') {
+        let obj = {completed: false, item: this.newTodoItem};
+        // text/text가 아닌 text/boolean 값을 저장, 텍스트/완료여부
+        localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+        this.clearInput();
+      }
     },
       clearInput: function() {
-        this.newTodoItem = ""; //다 쓴 후 초기화시켜준다.
+        this.newTodoItem = ''; //다 쓴 후 초기화시켜준다.
     }
   }
 }
